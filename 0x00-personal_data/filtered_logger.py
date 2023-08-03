@@ -8,11 +8,10 @@ import logging
 PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 
 
-def filter_datum(fields: List[str], red: str, message: str, sep: str) -> str:
+def filter_datum(fields: List[str], red: str, msg: str, sep: str) -> str:
     """ returns an obfuscated message """
     for f in fields:
-        idx = message.index(f)
-        val = message[idx+len(f)+1:message.find(sep, idx)]
+        val = msg[msg.index(f)+len(f)+1:msg.find(sep, msg.index(f))]
         message = re.sub(re.escape(val), red, message)
     return message
 
