@@ -11,7 +11,7 @@ PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 def filter_datum(fields: List[str], red: str, msg: str, sep: str) -> str:
     """ returns an obfuscated message """
     for f in fields:
-        val = msg[msg.index(f)+len(f)+1:msg.find(sep, msg.index(f))]
+        val: str = msg[msg.index(f)+len(f)+1:msg.find(sep, msg.index(f))]
         msg = re.sub(val, red, msg)
     return msg
 
