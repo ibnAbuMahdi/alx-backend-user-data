@@ -12,8 +12,8 @@ def filter_datum(fields: List[str], red: str, msg: str, sep: str) -> str:
     """ returns an obfuscated message """
     for f in fields:
         val = msg[msg.index(f)+len(f)+1:msg.find(sep, msg.index(f))]
-        message = re.sub(re.escape(val), red, message)
-    return message
+        msg = re.sub(val, red, msg)
+    return msg
 
 
 class RedactingFormatter(logging.Formatter):
