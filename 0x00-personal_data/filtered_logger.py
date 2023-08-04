@@ -8,12 +8,14 @@ import logging
 PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
     """ returns an obfuscated message """
-    for f in fls:
-        val: str = msg[msg.index(f)+len(f)+1:msg.find(sep, msg.index(f))]
-        msg = re.sub(val, red, msg)
-    return msg
+    for f in fields:
+        val: str = message[message.index(f)+len(f)+1:
+                           message.find(separator, message.index(f))]
+        message = re.sub(val, redaction, message)
+    return message
 
 
 class RedactingFormatter(logging.Formatter):
