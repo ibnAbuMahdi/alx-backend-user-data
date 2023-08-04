@@ -19,12 +19,13 @@ def filter_datum(fields: List[str], redaction: str,
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
+    """ Redacting Formatter class for Formatting records
         """
 
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
+    REDACTION: str = "***"
+    FORMAT: str = "[HOLBERTON] %(name)s %(levelname)s\
+%(asctime)-15s: %(message)s"
+    SEPARATOR: str = ";"
 
     def __init__(self, fields: Sequence[str]):
         """ the init class method """
