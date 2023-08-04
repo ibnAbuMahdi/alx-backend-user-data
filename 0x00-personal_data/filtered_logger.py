@@ -35,8 +35,7 @@ class RedactingFormatter(logging.Formatter):
         """ format the log record message """
         m: str = filter_datum(self.__fields, self.REDACTION,
                               record.getMessage(), self.SEPARATOR)
-        nr: logging.LogRecord = logging.LogRecord(record.name, record.levelno, record.pathname,
-                               record.lineno, m, record.args, record.exc_info)
+        nr: logging.LogRecord = logging.LogRecord(record.name, record.levelno, record.pathname, record.lineno, m, record.args, record.exc_info)
         return super().format(nr)
 
 
