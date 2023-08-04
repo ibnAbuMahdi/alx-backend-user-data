@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ filtered_logger """
-from typing import (List, Sequence)
+from typing import (List, Union, Sequence)
 import re
 import os
 import mysql.connector
@@ -23,11 +23,11 @@ class RedactingFormatter(logging.Formatter):
         """
 
     REDACTION: str = "***"
-    FORMAT: str = "[HOLBERTON] %(name)s %(levelname)s\
+    FORMAT: str = "[HOLBERTON] %(name)s %(levelname)s \
 %(asctime)-15s: %(message)s"
     SEPARATOR: str = ";"
 
-    def __init__(self, fields: Sequence[str]):
+    def __init__(self, fields: List[str]) -> None:
         """ the init class method """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.__fields = fields
@@ -57,7 +57,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
     """ returns a connector to MySQL database """
     host: str = os.environ["PERSONAL_DATA_DB_HOST"]
     user: str = os.environ["PERSONAL_DATA_DB_USERNAME"]
@@ -65,12 +65,13 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     database: str = os.environ["PERSONAL_DATA_DB_NAME"]
     try:
         # Create a connection to the MySQL database
-        conn = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
-        )
+        conn: mysql.connector.connection.MySQLConnection = mysql.\
+            connector.connect(
+                host=host,
+                user=user,
+                password=password,
+                database=database
+            )
 
         if conn.is_connected():
             return conn
@@ -83,24 +84,26 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 def main():
     """ the main method that returns formatted log from db """
-    connection = get_db()
-    fields = ("name", "email", "phone", "ssn", "password")
+    connection: Union[mysql.connector.connection.MySQLConnection, None]\
+        = get_db()
+    fields: Sequence = ("name", "email", "phone", "ssn", "password")
     if connection is not None:
-        cursor = connection.cursor()
+        cursor: Any = connection.cursor()
         cursor.execute("SELECT * FROM users")
-        result = cursor.fetchall()
+        result: List = cursor.fetchall()
         cursor.close()
         connection.close()
 
         for row in result:
-            mes = "name={}; email={}; phone={}; ssn={}; password{}; ip={}; \
-last_login={}; user_agent={}".\
+            mes: str = "name={}; email={}; phone={}; ssn={}; password{};\
+                    ip={}; last_login={}; user_agent={}".\
                     format(row[0], row[1], row[2], row[3],
                            row[4], row[5], row[6], row[7])
             formatter: RedactingFormatter = RedactingFormatter(fields=fields)
-            record = logging.LogRecord("user_data",
-                                       logging.INFO, None, None,
-                                       mes, None, None)
+            record: logging.LogRecord = logging.LogRecord("user_data",
+                                                          logging.INFO, None,
+                                                          None, mes, None,
+                                                          None)
             print(formatter.format(record))
 
 
