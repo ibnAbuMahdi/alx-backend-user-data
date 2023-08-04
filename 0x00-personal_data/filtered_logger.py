@@ -76,10 +76,10 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         if conn.is_connected():
             return conn
         else:
-            return None
+            raise ConnectionError("Failed to establish a database connection.")
+
     except mysql.connector.Error as e:
-        print(f"Error: {e}")
-        return None
+        raise ConnectionError("Error connecting to database: {}".format(e))
 
 
 def main():
