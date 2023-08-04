@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """ filtered_logger """
-from typing import (List, Union, Sequence)
+from typing import (Any, List, Union, Sequence)
 import re
 import os
 import mysql.connector
 import logging
 # PII_FIELDS = ("email", "phone", "ssn", "password", "ip")
-PII_FIELDS = ("email", "phone", "ssn", "password", "name")
+PII_FIELDS = ["email", "phone", "ssn", "password", "name"]
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -58,7 +58,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """ returns a connector to MySQL database """
     host: str = os.environ["PERSONAL_DATA_DB_HOST"]
     user: str = os.environ["PERSONAL_DATA_DB_USERNAME"]
@@ -66,13 +66,12 @@ def get_db() -> Union[mysql.connector.connection.MySQLConnection, None]:
     database: str = os.environ["PERSONAL_DATA_DB_NAME"]
     try:
         # Create a connection to the MySQL database
-        conn: mysql.connector.connection.MySQLConnection = mysql.\
-            connector.connect(
-                host=host,
-                user=user,
-                password=password,
-                database=database
-            )
+        conn = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
 
         if conn.is_connected():
             return conn
