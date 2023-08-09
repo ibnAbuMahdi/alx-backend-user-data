@@ -32,7 +32,7 @@ class BasicAuth(Auth):
         """
         if not d_b64_header or not isinstance(d_b64_header, str) or \
                 ':' not in d_b64_header:
-            return None
+            return None, None
         return d_b64_header.split(':')[0], \
             d_b64_header[d_b64_header.find(':')+1:]
 
