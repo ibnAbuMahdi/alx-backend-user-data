@@ -3,6 +3,7 @@
 from flask import request
 from typing import (List, TypeVar)
 
+
 class Auth:
     """Class to handle authentication """
 
@@ -10,12 +11,16 @@ class Auth:
         """ Determine if path requires auth"""
         if path is None or excluded_paths is None:
             return True
-        
+
         if not path.endswith('/'):
             path += '/'
-        
+
         if path in excluded_paths:
             return False
+        for ex_path in excluded_paths:
+            if ex_path.endswith('*'):
+                if path.startswith(ex_path[:-2]):
+                    return False
         return True
 
     def authorization_header(self, request=None) -> str:
@@ -23,7 +28,6 @@ class Auth:
         if request is None or request.headers.get('Authorization') is None:
             return None
         return request.headers.get('Authorization')
-    
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ returns the current user based on details in request """
