@@ -27,7 +27,7 @@ class BasicAuth(Auth):
         except (binascii.Error, ValueError) as e:
             return None
 
-def extract_user_credentials(self, d_b64_header: str) -> Tuple(str):
+    def extract_user_credentials(self, d_b64_header: str) -> tuple:
         """ return the credentials attached to the header
             authorization values
         """
