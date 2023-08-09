@@ -26,8 +26,9 @@ print(u.display_name() if u is not None else "None")
 u = a.user_object_from_credentials(89, 98)
 print(u.display_name() if u is not None else "None")
 
-u = a.user_object_from_credentials("email@notfound.com", "pwd")
-print(u.display_name() if u is not None else "None")
+print("test subject", end="=>")
+u = len(User.search({"email":"email@notfound.com"}))
+print(u if u is not None else "None")
 
 u = a.user_object_from_credentials(user_email, "pwd")
 print(u.display_name() if u is not None else "None")
