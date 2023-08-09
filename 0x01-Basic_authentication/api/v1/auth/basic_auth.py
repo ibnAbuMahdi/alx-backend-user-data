@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-""" basic_auth """
+""" The basic authentication file """
 from api.v1.auth.auth import Auth
 import base64
 import binascii
 from models.user import User
 from typing import (Tuple, TypeVar)
+
 
 class BasicAuth(Auth):
     """ class for basic authentication """
@@ -25,7 +26,8 @@ class BasicAuth(Auth):
             return base64.b64decode(b64_header).decode('utf-8')
         except (binascii.Error, ValueError) as e:
             return None
-   def extract_user_credentials(self, d_b64_header: str) -> Tuple(str):
+
+def extract_user_credentials(self, d_b64_header: str) -> Tuple(str):
         """ return the credentials attached to the header
             authorization values
         """
