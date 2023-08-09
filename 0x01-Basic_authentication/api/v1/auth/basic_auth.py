@@ -17,7 +17,6 @@ class BasicAuth(Auth):
             return None
         return a_header.split()[1]
 
-
     def decode_base64_authorization_header(self, b64_header: str) -> str:
         """ return the decoded @b64_header if valid b64 string """
         if not b64_header or not isinstance(b64_header, str):
@@ -60,4 +59,6 @@ class BasicAuth(Auth):
                 if d_b64_header:
                     user_creds = self.extract_user_credentials(d_b64_header)
                     if user_creds:
-                        return self.user_object_from_credentials(user_creds)
+                        return self.\
+                                user_object_from_credentials(user_creds[0],
+                                                             user_creds[1])
