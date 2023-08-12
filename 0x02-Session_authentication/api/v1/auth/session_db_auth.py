@@ -36,6 +36,8 @@ class SessionDBAuth(SessionExpAuth):
         if exp_time < datetime.now():
             return None
         users = UserSession.search({'session_id': session_id})
+        if len(users) == 0:
+            return None
         return users[0].user_id
 
     def destroy_session(self, request=None):
