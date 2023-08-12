@@ -6,7 +6,9 @@ from flask import abort, jsonify, request
 from models.user import User
 import os
 
-@sess_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
+
+@sess_views.route('/auth_session/login', methods=['POST'],
+                  strict_slashes=False)
 def login_session():
     """ login into a user session or create new session """
     email = request.form.get('email')
@@ -17,7 +19,7 @@ def login_session():
 
     if not pword:
         return jsonify({'error': 'password missing'}), 400
-    
+
     users = User.search({'email': email})
     if not len(users):
         return jsonify({"error": "no user found for this email"}), 404
@@ -29,11 +31,12 @@ def login_session():
     resp.set_cookie(os.getenv('SESSION_NAME'), s_id)
     return resp
 
-@sess_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+
+@sess_views.route('/auth_session/logout', methods=['DELETE'],
+                  strict_slashes=False)
 def logout():
     """ the logout method route """
     from api.v1.app import auth
     if not auth.destroy_session(request):
         abort(404)
     return jsonify({}), 200
-

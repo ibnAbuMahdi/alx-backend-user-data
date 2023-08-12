@@ -32,6 +32,7 @@ elif auth_type == 'session_db_auth':
     from api.v1.auth.session_db_auth import SessionDBAuth
     auth = SessionDBAuth()
 
+
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler
@@ -57,10 +58,11 @@ def forbidden(error) -> str:
 def init_auth():
     """ check authorization requirements
     """
-    ls = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+    ls = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/',
+          '/api/v1/auth_session/login/']
     if auth is None or not auth.require_auth(request.path, ls):
         return
-    #if auth.authorization_header(request) is None:
+    # if auth.authorization_header(request) is None:
     #    abort(401)
     request.current_user = auth.current_user(request)
     if auth.current_user(request) is None:
@@ -70,14 +72,6 @@ def init_auth():
 
 
 if __name__ == "__main__":
-    """auth_type = getenv("AUTH_TYPE")
-    if auth_type and auth_type != 'basic_auth':
-        from api.v1.auth.auth import Auth
-        auth = Auth()
-    elif auth_type == 'basic_auth':
-        from api.v1.auth.basic_auth import BasicAuth
-        auth = BasicAuth()
-    """
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
     app.run(host=host, port=port)

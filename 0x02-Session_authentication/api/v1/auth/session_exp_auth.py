@@ -13,7 +13,7 @@ class SessionExpAuth(SessionAuth):
 
     def __init__(self):
         """ init the instance """
-        
+
         s_drtn = os.getenv('SESSION_DURATION')
         if not s_drtn or not s_drtn.isdigit():
             self.session_duration = 0
@@ -38,9 +38,7 @@ class SessionExpAuth(SessionAuth):
         if 'created_at' not in self.user_id_by_session_id[session_id]:
             return None
         exp_time = self.user_id_by_session_id[session_id]['created_at']\
-                + timedelta(seconds=self.session_duration)
+            + timedelta(seconds=self.session_duration)
         if exp_time < datetime.now():
             return None
         return self.user_id_by_session_id[session_id]['user_id']
-
-

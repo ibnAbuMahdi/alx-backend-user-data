@@ -19,7 +19,7 @@ class SessionDBAuth(SessionExpAuth):
             return None
         session_dict = {'user_id': user_id, 'created_at': datetime.now()}
         self.user_id_by_session_id[s_id] = session_dict
-        user_session = UserSession(user_id=user_id, session_id = s_id)
+        user_session = UserSession(user_id=user_id, session_id=s_id)
         user_session.save()
         return s_id
 
@@ -32,10 +32,10 @@ class SessionDBAuth(SessionExpAuth):
         if 'created_at' not in self.user_id_by_session_id[session_id]:
             return None
         exp_time = self.user_id_by_session_id[session_id]['created_at']\
-                + timedelta(seconds=self.session_duration)
+            + timedelta(seconds=self.session_duration)
         if exp_time < datetime.now():
             return None
-        users = UserSession.search({'session_id':session_id})
+        users = UserSession.search({'session_id': session_id})
         return users[0].user_id
 
     def destroy_session(self, request=None):
@@ -47,6 +47,6 @@ class SessionDBAuth(SessionExpAuth):
         if not u_id:
             return False
         del self.user_id_by_session_id[s_id]
-        users = UserSession.search({'session_id':s_id})
+        users = UserSession.search({'session_id': s_id})
         users[0].remove()
         return True
