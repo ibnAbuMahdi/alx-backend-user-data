@@ -25,10 +25,9 @@ class SessionDBAuth(SessionExpAuth):
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
         """ create and return a session ID for user_id """
-        if not session_id or session_id not in self.user_id_by_session_id:
-            return None
         users = UserSession.search({'session_id': session_id})
-        return users[0].user_id
+        if not session_id or not len(users):
+            return None
         if self.session_duration <= 0:
             return users[0].user_id
         if 'created_at' not in self.user_id_by_session_id[session_id]:
