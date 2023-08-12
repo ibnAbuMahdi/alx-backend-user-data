@@ -34,27 +34,35 @@ class SessionAuth(Auth):
         u_id = self.user_id_for_session_id(s_id)
         return User.get(u_id)
 
+    def destroy_session(self, request=None):
+        """ destroys the user session """
+        s_id = self.session_cookie(request)
+        if not request or not s_id:
+            return False
+        u_id = self.user_id_for_session_id(s_id)
+        if not u_id:
+            return False
+        del self.user_id_by_session_id[s_id]
+        return True
 
-sess_views = Blueprint("sess_views", __name__, url_prefix="/api/v1")
-@sess_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
-def login_session():
-    """ login into a user session or create new session """
-    email = request.form.get('email')
-    pword = request.form.get('password')
 
-    if not email:
-        return jsonify({'error': 'email missing'}), 400
 
-    if not pword:
-        return jsonify({'error': 'password missing'}), 400
-    
-    users = User.search({'email': email})
-    if not len(users):
-        return jsonify({"error": "no user found for this email"}), 404
-    if not users[0].is_valid_password(pword):
-        return jsonify({"error": "wrong password"}), 401
-    from api.v1.app import auth
-    s_id = auth.create_session(users[0].id)
-    resp = jsonify(users[0].to_json())
-    resp.set_cookie(os.getenv('SESSION_NAME'), s_id)
-    return resp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
