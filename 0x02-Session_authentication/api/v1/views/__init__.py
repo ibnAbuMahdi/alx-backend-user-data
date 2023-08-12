@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" DocDocDocDocDocDoc
+""" DocDocDocDocDocDoc for the views
 """
 from flask import Blueprint
 

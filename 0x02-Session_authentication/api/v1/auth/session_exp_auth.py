@@ -12,7 +12,7 @@ class SessionExpAuth(SessionAuth):
     """ the session with Expiration authentication class """
 
     def __init__(self):
-        """ init the instance """
+        """ init the instance and set session duration """
 
         s_drtn = os.getenv('SESSION_DURATION')
         if not s_drtn or not s_drtn.isdigit():

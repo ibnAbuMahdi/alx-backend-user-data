@@ -17,7 +17,7 @@ class Base():
     """
 
     def __init__(self, *args: list, **kwargs: dict):
-        """ Initialize a Base instance
+        """ Initialize a Base instance with dates and id
         """
         s_class = str(self.__class__.__name__)
         if DATA.get(s_class) is None:
