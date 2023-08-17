@@ -15,7 +15,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> TypeVar('User'):
+    def register_user(self, email: str, password: str) -> User:
         """ register a new user and return the user instance """
         try:
             found = self._db.find_user_by(email=email)
