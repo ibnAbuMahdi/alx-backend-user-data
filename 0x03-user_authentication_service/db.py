@@ -40,10 +40,9 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs) -> Any:
+    def find_user_by(self, **kwargs) -> User:
         """ returns a row in db based on @kwargs """
-        usr = self._session.query(User).filter_by(**kwargs).one()
-        return usr
+        return self._session.query(User).filter_by(**kwargs).one()
 
     def update_user(self, u_id: int, **kwargs) -> None:
         """ updates a user and return None """
@@ -55,3 +54,5 @@ class DB:
         for k, v in kwargs.items():
             setattr(user, k, v)
         self._session.commit()
+        self._session.close()
+        self._engine.dispose()
