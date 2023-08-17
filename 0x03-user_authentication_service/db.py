@@ -33,11 +33,12 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, h_pwd: str) -> TypeVar('User'):
+    def add_user(self, email: str, h_pwd: str) -> User:
         """ adds a user to db and return the user instance """
         user: User = User(email=email,  hashed_password=h_pwd)
         self._session.add(user)
         self._session.commit()
+        self._session.close()
         return user
 
     def find_user_by(self, **kwargs) -> Any:
