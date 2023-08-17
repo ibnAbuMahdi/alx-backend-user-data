@@ -33,14 +33,12 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, h_pwd: str) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """ adds a user to db and return the user instance """
-        if email and h_pwd:
-            user: User = User(email=email,  hashed_password=h_pwd)
-            self._session.add(user)
-            self._session.commit()
-            return user
-        return None
+        user = User(email=email,  hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
+        return user
 
     def find_user_by(self, **kwargs) -> Any:
         """ returns a row in db based on @kwargs """
