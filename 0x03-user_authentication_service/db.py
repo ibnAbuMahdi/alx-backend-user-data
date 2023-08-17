@@ -19,7 +19,8 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine("sqlite:///a.db", echo=False)
+        self._engine = create_engine("sqlite:///a.db", echo=False,
+                                     connect_args={"check_same_thread": False})
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -54,5 +55,3 @@ class DB:
         for k, v in kwargs.items():
             setattr(user, k, v)
         self._session.commit()
-        self._session.close()
-        self._engine.dispose()
