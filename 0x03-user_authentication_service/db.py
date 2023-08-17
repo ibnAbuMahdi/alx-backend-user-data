@@ -41,7 +41,6 @@ class DB:
             self._session.add(user)
             self._session.commit()
             self._session.close()
-            self._engine.dispose()
             return user
         return None
 
