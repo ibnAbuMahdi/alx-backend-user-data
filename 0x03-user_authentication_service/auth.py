@@ -15,20 +15,20 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, pwd: str) -> TypeVar('User'):
+    def register_user(self, email: str, password: str) -> TypeVar('User'):
         """ register a new user and return the user instance """
         try:
             found = self._db.find_user_by(email=email)
             raise ValueError('User {} already exists'.format(email))
         except NoResultFound as e:
-            h_pwd = _hash_password(pwd)
+            h_pwd = _hash_password(password)
             return self._db.add_user(email, h_pwd)
 
-    def valid_login(self, email: str, pwd: str) -> bool:
+    def valid_login(self, email: str, password: str) -> bool:
         """ determines the validity of @pwd """
         try:
             found = self._db.find_user_by(email=email)
-            if bcrypt.checkpw(pwd.encode('utf-8'), found.hashed_password):
+            if bcrypt.checkpw(password.encode('utf-8'), found.hashed_password):
                 return True
         except NoResultFound as e:
             return False
@@ -90,6 +90,6 @@ def _generate_uuid() -> str:
     return str(uuid.uuid4())
 
 
-def _hash_password(pwd: str) -> bytes:
+def _hash_password(password: str) -> bytes:
     """ returns a salted hash of the @pwd """
     return bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())

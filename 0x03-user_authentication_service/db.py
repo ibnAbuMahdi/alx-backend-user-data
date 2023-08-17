@@ -45,9 +45,9 @@ class DB:
         """ returns a row in db based on @kwargs """
         return self._session.query(User).filter_by(**kwargs).one()
 
-    def update_user(self, u_id: int, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """ updates a user and return None """
-        user: User = self.find_user_by(id=u_id)
+        user: User = self.find_user_by(id=user_id)
         for k in kwargs.keys():
             if k not in tuple(col.name for col in User.__table__.columns):
                 raise ValueError
