@@ -35,23 +35,29 @@ class DB:
 
     def add_user(self, email: str, h_pwd: str) -> User:
         """ adds a user to db and return the user instance """
-        user: User = User(email=email,  hashed_password=h_pwd)
-        self._session.add(user)
-        self._session.commit()
-        self._session.close()
-        return user
+        if email and h_pwd:
+            user: User = User(email=email,  hashed_password=h_pwd)
+            self._session.add(user)
+            self._session.commit()
+            self._session.close()
+            return user
+        return None
 
     def find_user_by(self, **kwargs) -> Any:
         """ returns a row in db based on @kwargs """
-        return self._session.query(User).filter_by(**kwargs).one()
+        usr = self._session.query(User).filter_by(**kwargs).one()
+        self._session.close()
+        return usr
 
     def update_user(self, u_id: int, **kwargs) -> None:
         """ updates a user and return None """
         user: User = self.find_user_by(id=u_id)
+        sess = self._session
         for k in kwargs.keys():
             if k not in tuple(col.name for col in User.__table__.columns):
                 raise ValueError
 
         for k, v in kwargs.items():
             setattr(user, k, v)
-        self._session.commit()
+        sess.commit()
+        sess.close()
