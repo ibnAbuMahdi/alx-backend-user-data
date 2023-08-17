@@ -28,8 +28,8 @@ class Auth:
         """ determines the validity of @pwd """
         try:
             found = self._db.find_user_by(email=email)
-            if bcrypt.checkpw(password.encode('utf-8'), found.hashed_password):
-                return True
+            return bcrypt.checkpw(password.encode('utf-8'),
+                                  found.hashed_password)
         except NoResultFound as e:
             return False
         return False
@@ -92,4 +92,4 @@ def _generate_uuid() -> str:
 
 def _hash_password(password: str) -> bytes:
     """ returns a salted hash of the @pwd """
-    return bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
