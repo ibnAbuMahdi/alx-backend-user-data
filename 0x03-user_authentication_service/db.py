@@ -43,18 +43,15 @@ class DB:
     def find_user_by(self, **kwargs) -> Any:
         """ returns a row in db based on @kwargs """
         usr = self._session.query(User).filter_by(**kwargs).one()
-        self._session.close()
         return usr
 
     def update_user(self, u_id: int, **kwargs) -> None:
         """ updates a user and return None """
         user: User = self.find_user_by(id=u_id)
-        sess = self._session
         for k in kwargs.keys():
             if k not in tuple(col.name for col in User.__table__.columns):
                 raise ValueError
 
         for k, v in kwargs.items():
             setattr(user, k, v)
-        sess.commit()
-        sess.close()
+        self._session.commit()
